@@ -1,0 +1,44 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row">
+    <div class="col-8 offset-2">
+        <br>
+        <h2>Edit Listing</h2>
+        <form method="POST" action="/listings/<%= updateListings._id %>?_method=PUT" novalidate class="needs-validation">
+            <div class="mb-3">
+                <label for="title" class="form-label">Edit Title</label>
+                <input name="title" type="text" class="form-control" value="<%= updateListings.title %>" required>
+                <div class="invalid-feedback">Please enter a title</div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Edit Description</label>
+                <textarea name="description" class="form-control" required><%= updateListings.description %></textarea>
+                <div class="invalid-feedback">Please enter a short description</div>
+            </div>
+            <div class="mb-3">
+                <label for="img-url" class="form-label">Edit Image URL</label>
+                <input name="image" type="text" class="form-control" value="<%= updateListings.image.url %>" required>
+                <div class="invalid-feedback">Please enter a valid URL</div>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Edit Price of the accommodation</label>
+                <input name="price" type="number" class="form-control" value="<%= updateListings.price %>" required>
+                <div class="invalid-feedback">Enter a price</div>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="location" class="form-label">Edit Location</label>
+                    <input name="location" type="text" class="form-control" value="<%= updateListings.location %>" required>
+                    <div class="invalid-feedback">Please enter a location</div>
+                </div>
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">Edit Country</label>
+                    <input name="country" type="text" class="form-control" value="<%= updateListings.country %>" required>
+                    <div class="invalid-feedback">Please enter a country name</div>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-dark update-btn">Update</button>
+            <br><br>
+        </form>
+    </div>
+</div>
