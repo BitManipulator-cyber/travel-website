@@ -9,7 +9,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { listingSchema } = require("./schema.js");
+const { listingSchema , reviewSchema } = require("./schema.js");
+const Review = require("./models/review.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -37,11 +38,22 @@ const validateListing = (req , res , next)=>{
     let {error} = listingSchema.validate(req.body);
 
     if(error){
-        throw new ExpressError(400 , result.error);
+       throw new ExpressError(400, error.message);
     }else{
         next();
     }
 }
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map(el => el.message).join(', ');
+    throw new ExpressError(400, msg);
+  } else {
+    next();
+  }
+};
+
 
 // app.get("/testlisting" , async (req,res)=>{
 //     let sample = new Listing({
@@ -155,14 +167,41 @@ app.delete(
   })
 );
 
+//Adding a Review (POST ROUTE)
+app.post("/listings/:id/review", validateReview, wrapAsync(async (req, res) => {
+  let listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    throw new ExpressError(404, "Listing not found");
+  }
+  let newReview = new Review(req.body.review);
+
+  listing.review.push(newReview);
+  await newReview.save();
+  await listing.save();
+  
+  res.redirect(`/listings/${listing._id}`);
+}));
+
+//Delete Review Route 
+app.delete("/listings/:id/review/:reviewId" , wrapAsync(async (req , res)=>{
+  let {id , reviewId} = req.params;
+
+  await Listing.findByIdAndUpdate(id , {$pull: {review: reviewId}});
+  await Review.findByIdAndDelete(reviewId);
+
+  res.redirect(`/listings/${id}`);
+}))
+
 app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let allInfo = await Listing.findById(id);
+    let allInfo = await Listing.findById(id).populate("review");
     res.render("listings/show.ejs", { allInfo });
   })
 );
+
+
 
 // app.get('/^/.*/' , (req , res)=>{
 //     res.send(path.join(__dirname , 'public' , 'index.html'));

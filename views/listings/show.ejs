@@ -1,7 +1,7 @@
 <% layout("/layouts/boilerplate") %>
     <h2><%= allInfo.title %></h2>
     
-    <div class="card" style="width: 20rem;">
+    <div class="card listing-card" style="width: 20rem;">
     <img src="<%= allInfo.image.url %>" class="card-img-top show-img" alt="listing-image">
     <div class="card-body">
         <p class="card-text"></p>
@@ -28,18 +28,42 @@
     <br><br>
     <div class="col-8 mb-3">
         <h4>Leave a Review!</h4>
-        <form action="">
+        <form action="/listings/<%= allInfo._id %>/review" method="POST" novalidate class="needs-validation">
             <div>
-                <label for="rating">
-                    <input type="range" min="1" max="5" id="rating" name="review[rating]">
+                <label for="rating" class="form-label"></label>
+                    <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range">
                 </label>
             </div>
             <div>
                 <label for="comment" class="form-label"></label>
-                <textarea name="review[comment]" id="comment" cols="30" rows="6" class="form-control"></textarea>
+                <textarea name="review[comment]" id="comment" cols="30" rows="6" class="form-control" required></textarea>
+                <div class="invalid-feedback">Please add some review</div>
             </div>
+            
             <br><br>
             <button class="btn btn-dark">Submit</button>
         </form>
+        <hr>
+        <p><b>All reviews</b></p>
+        <!-- <ul>
+            <% for(review of allInfo.review) { %>
+                <li><%= review.comment %> , <%= review.rating %> stars</li>
+            <% } %>
+        </ul> -->
+
+        <div class="row">
+            <% for(review of allInfo.review) { %>
+                <div class="card col-5 ms-3 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Jane Doe</h5>
+                        <p class="card-text"><%= review.comment %></p>
+                        <p class="card-text"><%= review.rating %> stars</p>
+                    </div>
+                    <form class="mb-3 mt-3" method="POST" action="/listings/<%= allInfo._id %>/review/<%= review._id %>?_method=DELETE">
+                        <button class="btn btn-sm btn-dark">Delete</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
     </div>
     
