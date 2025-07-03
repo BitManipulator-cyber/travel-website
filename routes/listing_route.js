@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const Listing = require("../models/listing.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
@@ -47,34 +47,30 @@ router.get(
 );
 
 //Update Route
-router.put(
-  "/:id", validateListing ,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    const { title, description, image, price, location, country } = req.body;
+router.put("/:id", validateListing, wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const { listing } = req.body;
 
-    const listing = await Listing.findById(id);
+  const oldListing = await Listing.findById(id);
 
-    const updatedData = {
-      title,
-      description,
-      price,
-      location,
-      country,
-      image: listing.image,
+  // If no image was provided in the edit form, preserve the old image
+  const updatedData = {
+    ...listing,
+    image: oldListing.image
+  };
+
+  // Only update image URL if a new one was provided
+  if (listing.image && listing.image.trim() !== "") {
+    updatedData.image = {
+      ...oldListing.image,
+      url: listing.image
     };
+  }
 
-    if (image && image.trim() !== "") {
-      updatedData.image = {
-        ...listing.image, // preserve filename
-        url: image, // update only URL
-      };
-    }
+  await Listing.findByIdAndUpdate(id, updatedData);
+  res.redirect(`/listings/${id}`);
+}));
 
-    await Listing.findByIdAndUpdate(id, updatedData);
-    res.redirect(`/listings/${id}`);
-  })
-);
 
 router.delete(
   "/:id",
