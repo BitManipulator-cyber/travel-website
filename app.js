@@ -78,7 +78,7 @@ app.get('/demouser' , async(req , res)=>{
 
 app.use('/listings' , listing_route);
 app.use('/listings/:id/review' , review_route);
-app.use('/signup' , user_route);
+app.use('/' , user_route);
 
 
 app.use((err, req, res, next) => {

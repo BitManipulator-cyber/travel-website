@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require("../utils/wrapAsync.js");
 const User = require('../models/user.js');
+const passport = require('passport');
 
 //GET - for /signup
-router.get('/' , (req , res)=>{
+router.get('/signup' , (req , res)=>{
     res.render("users/signup.ejs");
 });
 
 //POST - for /signup
-router.post('/' , wrapAsync(async(req , res)=>{
+router.post('/signup' , wrapAsync(async(req , res)=>{
     try{
         let {username , email , password} = req.body;
         const newUser = new User({email , username});
@@ -22,6 +23,17 @@ router.post('/' , wrapAsync(async(req , res)=>{
         res.redirect("/signup");
     }
     
+}))
+
+//GET - for /login page
+router.get('/login' , (req , res)=>{
+    res.render('users/login.ejs')
+})
+
+//POST - for /login page using passport.authenticate() to authencticate the user
+router.post('/login' , passport.authenticate("local" , {failureRedirect: '/login' , failureFlash: true}) , wrapAsync(async (req , res)=>{
+    req.flash("success" , "Welcome to Wanderlust ! You are logged in");
+    res.redirect("/listings");
 }))
 
 module.exports = router;
