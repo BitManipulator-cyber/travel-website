@@ -8,8 +8,14 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const listing_route = require("./routes/listing_route.js");
 const review_route = require('./routes/review_route.js');
+const user_route = require('./routes/user_route.js');
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStratergy = require("passport-local");
+const User = require("./models/user.js");
+
+
 const sessionOptions = {
    secret: "mysecretcode",
    resave: false,
@@ -36,6 +42,13 @@ app.get("/", (req, res) => {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStratergy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 main()
   .then((res) => {
     console.log("Connection succesful...");
@@ -52,8 +65,20 @@ app.use((req , res , next) =>{
   next();
 })
 
+app.get('/demouser' , async(req , res)=>{
+  let fakeUser = new User({
+    email: "student@gmail.com",
+    username: "delta-user" //Adding username because passport implicitely adds username to it's userSchema
+  })
+
+  let registeredUser = await User.register(fakeUser , "helloworld") //register() method is used to check if the user is unique
+  //register(user_to_save , pass_key , call_back) can refer to passport-local-mongoose documentation on npm site
+  res.send(registeredUser);
+})
+
 app.use('/listings' , listing_route);
 app.use('/listings/:id/review' , review_route);
+app.use('/signup' , user_route);
 
 
 app.use((err, req, res, next) => {
