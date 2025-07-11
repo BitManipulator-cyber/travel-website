@@ -23,6 +23,11 @@ router.get("/", async (req, res) => {
 
 //New Route
 router.get("/new", (req, res) => {
+  if(!req.isAuthenticated())
+  {
+    req.flash("error" , "You must be logged in to add a new listing");
+    return res.redirect("/login");
+  }
   res.render("listings/new.ejs");
 });
 
