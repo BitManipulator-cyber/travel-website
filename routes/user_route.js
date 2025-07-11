@@ -32,8 +32,13 @@ router.get('/login' , (req , res)=>{
 
 //POST - for /login page using passport.authenticate() to authencticate the user
 router.post('/login' , passport.authenticate("local" , {failureRedirect: '/login' , failureFlash: true}) , wrapAsync(async (req , res)=>{
-    req.flash("success" , "Welcome to Wanderlust ! You are logged in");
-    res.redirect("/listings");
+    try{
+        req.flash("success" , "Welcome to Wanderlust ! You are logged in");
+        res.redirect("/listings");
+    }catch(e){
+        req.flash("error" , e.message);
+        res.redirect("/login");
+    }
 }))
 
 module.exports = router;
