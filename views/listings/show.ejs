@@ -13,7 +13,7 @@
         <li><%= allInfo.location %></li>
         <li>&#8377;<%= allInfo.price ? allInfo.price.toLocaleString("en-IN") : "N/A" %></li>
     </ul>
-
+    <% if(currentUser && allInfo.owner._id.equals(currentUser._id)) { %>
         <div class="row">
         <div class="col-8 d-flex justify-content-start gap-2">
             <form action="/listings/<%= allInfo._id %>/edit" method="GET">
@@ -24,7 +24,10 @@
             </form>
         </div>
         </div>
+    <% } %>
     <br><br>
+
+    <% if(currentUser) { %>
     <div class="col-8 mb-3">
         <h4>Leave a Review!</h4>
         <form action="/listings/<%= allInfo._id %>/review" method="POST" novalidate class="needs-validation">
@@ -42,26 +45,22 @@
             <br><br>
             <button class="btn btn-dark">Submit</button>
         </form>
+    <% } %>
         <hr>
-        <p><b>All reviews</b></p>
-        <!-- <ul>
-            <% for(review of allInfo.review) { %>
-                <li><%= review.comment %> , <%= review.rating %> stars</li>
-            <% } %>
-        </ul> -->
 
+        <p><b>All reviews</b></p>
         <div class="row">
             <% for(review of allInfo.review) { %>
-                <div class="card col-5 ms-3 mb-3">
+                    <div class="card col-5 ms-3 mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Jane Doe</h5>
+                        <h5 class="card-title"><%= review.author.username %></h5>
                         <p class="card-text"><%= review.comment %></p>
                         <p class="card-text"><%= review.rating %> stars</p>
                     </div>
                     <form class="mb-3 mt-3" method="POST" action="/listings/<%= allInfo._id %>/review/<%= review._id %>?_method=DELETE">
                         <button class="btn btn-sm btn-dark">Delete</button>
                     </form>
-                </div>
+                    </div>
             <% } %>
         </div>
     </div>
