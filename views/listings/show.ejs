@@ -7,24 +7,23 @@
         <p class="card-text"></p>
     </div>
     </div>
-
+    <h4>Owned by: <%= allInfo.owner.username %></h4>
     <ul>
         <li><%= allInfo.description %></li>
         <li><%= allInfo.location %></li>
-        <li>&#8377;<%= allInfo.price ? allInfo.price.toLocaleString("en-IN") : "N/A" %>
-</li>
-
+        <li>&#8377;<%= allInfo.price ? allInfo.price.toLocaleString("en-IN") : "N/A" %></li>
     </ul>
-    <div class="row">
-    <div class="col-8 d-flex justify-content-start gap-2">
-        <form action="/listings/<%= allInfo._id %>/edit" method="GET">
-        <button class="btn btn-dark edit-btn">Edit</button>
-        </form>
-        <form method="POST" action="/listings/<%= allInfo._id %>?_method=DELETE">
-        <button class="btn btn-dark delete-btn">Delete</button>
-        </form>
-    </div>
-    </div>
+
+        <div class="row">
+        <div class="col-8 d-flex justify-content-start gap-2">
+            <form action="/listings/<%= allInfo._id %>/edit" method="GET">
+            <button class="btn btn-dark edit-btn">Edit</button>
+            </form>
+            <form method="POST" action="/listings/<%= allInfo._id %>?_method=DELETE">
+            <button class="btn btn-dark delete-btn">Delete</button>
+            </form>
+        </div>
+        </div>
     <br><br>
     <div class="col-8 mb-3">
         <h4>Leave a Review!</h4>
