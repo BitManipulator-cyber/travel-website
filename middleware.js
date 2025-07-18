@@ -23,7 +23,7 @@ module.exports.saveRedirectUrl = (req , res , next)=>{
 module.exports.isOwner = async (req , res , next)=>{
     const { id } = req.params;
     let listings = await Listing.findById(id);
-    if(!listings.owner.equals(res.locals.currentUser))
+    if(!listings.owner._id.equals(res.locals.currentUser._id))
     {
         req.flash("error" , "You don't have permission");
         return res.redirect(`/listings/${id}`);
