@@ -3,7 +3,7 @@
     <div class="col-8 offset-2">
         <br>
     <h2>Add a new Listing</h2>
-    <form method="POST" action="/listings" novalidate class="needs-validation">
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">Enter Title</label>
             <input placeholder="Add an catchy title" name="listing[title]" type="text" class="form-control" required>
@@ -15,11 +15,13 @@
             <div class="invalid-feedback">Please enter a short description</div>
             <!-- <input placeholder="Enter description" name="description" type="text" class="form-control"> -->
         </div>
+       
         <div class="mb-3">
-            <label for="img-url" class="form-label">Enter Image URL</label>
-            <input placeholder="Enter image URL" name="listing[image]" type="text" class="form-control">
+            <label for="img-url" class="form-label">Upload Listing Image</label>
+            <input name="listing[image]" type="file" class="form-control">
             <div class="invalid-feedback">Please enter a valid url</div>
         </div>
+
         <div class="mb-3">
             <label for="price" class="form-label">Enter Price of the accomodation</label>
             <input placeholder="Eg. 1200" name="listing[price]" type="number" class="form-control" required>

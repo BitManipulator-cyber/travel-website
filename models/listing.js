@@ -16,16 +16,9 @@ const listingSchema = new Schema({
     description: {
         type: String,
     },
-    image: {
-        filename: {
-            type: String,
-            default: "listingimage"
-        },
-        url: {
-            type: String,
-            //default: "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg",
-            set: (v) => v === " " ? "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" : v,
-        }
+    image:{
+        url: String,
+        filename: String,
     },
     price: {
         type: Number,
