@@ -1,8 +1,8 @@
 <% layout("/layouts/boilerplate") %>
-<style>
+<!-- <style>
     body { margin: 0; padding: 0; }
     #map { position: absolute; top: 0; bottom: 0; width: 100%; }
-  </style>
+  </style> -->
     <h2><%= allInfo.title %></h2>
     
     <div class="card listing-card" style="width: 20rem;">
@@ -78,12 +78,12 @@
             <% } %>
         </div>
     </div>
-    <div class="container text-center my-4">
+    <!-- <div class="container text-center my-4">
     <h3>Where you'll be</h3>
     <div id="map" style="height: 400px;"></div>
-    </div>
+    </div> -->
 
-    <script>
+    <!-- <script>
     document.addEventListener('DOMContentLoaded', () => {
         maptilersdk.config.apiKey = "<%= map_api %>";
         const map = new maptilersdk.Map({
@@ -93,7 +93,7 @@
             zoom: 11
         });
   });
-</script>
+</script> -->
 
 
 
